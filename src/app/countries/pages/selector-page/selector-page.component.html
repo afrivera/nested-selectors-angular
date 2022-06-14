@@ -1,1 +1,64 @@
-<p>selector-page works!</p>
+<h1>Nested Selectors</h1>
+<hr>
+
+<form [formGroup]="myForm" (ngSubmit)="save()">
+
+    <!-- Regions -->
+    <div class="row">
+        <div class="col">
+            <label for="" class="form-label">Continent</label>
+            <select name="" id="" 
+                    class="form-control"
+                    formControlName="region">
+                <option value="">-- Select Continent --</option>
+                <option *ngFor="let region of regions"
+                        [value]="region | lowercase">
+                    {{ region }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Country -->
+    <div class="row">
+        <div class="col">
+            <label for="" class="form-label">Country</label>
+            <select name="" id="" 
+                    class="form-control"
+                    formControlName="country">
+                <option value="">-- Select country --</option>
+                <option *ngFor="let country of countries"
+                        [value]="country.alpha3Code">
+                    {{ country.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <!-- borders -->
+    <div class="row">
+        <div class="col">
+            <label for="" class="form-label">Border</label>
+            <select name="" id="" 
+                    class="form-control"
+                    formControlName="country">
+                <option value="">-- Select border country --</option>
+                <option *ngFor="let country of countries"
+                        [value]="country.alpha3Code">
+                    {{ country.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col">
+            <button class="btn btn-primary float-end"
+                    type="submit">Send</button>
+        </div>
+    </div>
+</form>
+
+<h3>Form</h3>
+<pre> {{ myForm.valid }}</pre>
+<pre> {{ myForm.value | json }}</pre>
