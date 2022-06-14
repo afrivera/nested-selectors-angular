@@ -14,15 +14,20 @@ export class SelectorPageComponent implements OnInit {
 
   myForm: FormGroup = this.fb.group({
     region : [ '', Validators.required ],
-    country: ['', Validators.required ],
-    border : ['', Validators.required ],
+    country: [ '', Validators.required ],
+    border : [ '', Validators.required ],
+    // border : [ {value: '', disabled: true}, Validators.required ],
   });
 
   
   // fill selectors
   regions  : string[] = [];
   countries: SmallCountry [] = [];
-  borders  : string [] = []
+  // borders  : string [] = []
+  borders  : SmallCountry [] = []
+
+  // ui
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -35,10 +40,17 @@ export class SelectorPageComponent implements OnInit {
     // when change the region
     this.myForm.get('region')?.valueChanges
       .pipe(
-        tap( ( _ ) => this.myForm.get( 'country' )?.reset('')),
+        tap( ( _ ) =>{ 
+          this.myForm.get( 'country' )?.reset('');
+          // this.myForm.get( 'border')?.disable();
+          this.loading = true;
+        }),
         switchMap( region => this.countriesService.getCountriesByRegion( region ))
       )
-      .subscribe( countries => this.countries = countries);
+      .subscribe( countries =>{
+        this.countries = countries;
+        this.loading = false;
+      });
     // this.myForm.get('region')?.valueChanges
     //   .subscribe( region =>{
     //     console.log(region);
@@ -51,11 +63,20 @@ export class SelectorPageComponent implements OnInit {
     // when change the country
     this.myForm.get('country')?.valueChanges
         .pipe(
-          switchMap( code => this.countriesService.getCountriesByCode( code ))
+          tap(()=> {
+            this.borders = [];
+            this.myForm.get('border')?.reset('');
+            // this.myForm.get( 'border')?.enable();
+            this.loading = true;
+          }),
+          switchMap( code => this.countriesService.getCountriesByCode( code )),
+          switchMap( country=> this.countriesService.getCountriesByCodes( country?.borders! ))
         )
-        .subscribe( country => {
+        .subscribe( countries => {
           // this.borders = country?.['borders'] || [];
-          console.log( country )
+          // console.log( countries )
+          this.borders = countries;
+          this.loading = false;
         })
          
     

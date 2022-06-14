@@ -20,7 +20,8 @@
     </div>
 
     <!-- Country -->
-    <div class="row">
+    <div class="row"
+         *ngIf="countries.length !== 0">
         <div class="col">
             <label for="" class="form-label">Country</label>
             <select name="" id="" 
@@ -36,18 +37,28 @@
     </div>
 
     <!-- borders -->
-    <div class="row">
+    <div class="row"
+         *ngIf="borders.length !== 0">
         <div class="col">
             <label for="" class="form-label">Border</label>
             <select name="" id="" 
                     class="form-control"
-                    formControlName="country">
+                    formControlName="border">
                 <option value="">-- Select border country --</option>
-                <option *ngFor="let country of countries"
-                        [value]="country.alpha3Code">
-                    {{ country.name }}
+                <option *ngFor="let border of borders"
+                        [value]="border.alpha3Code">
+                    {{ border.name }}
                 </option>
             </select>
+        </div>
+    </div>
+
+    <div class="row mt-4"
+         *ngIf="loading">
+        <div class="col">
+            <div class="alert alert-primary">
+                loading...
+            </div>
         </div>
     </div>
 
